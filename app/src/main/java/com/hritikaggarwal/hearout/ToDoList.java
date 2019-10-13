@@ -31,6 +31,7 @@ public class ToDoList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_list);
+
         Button btn3 = (Button) findViewById(R.id.prev_activity);
 
         // taskAndDeadline = new TreeMap<String, String>();
@@ -72,12 +73,12 @@ public class ToDoList extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStop() {
-        // call the superclass method first
-        super.onStop();
-        // intent here
-        Intent intent = new Intent(ToDoList.this, ListeningPage.class);
-        startActivity(intent);
-    }
+    //@Override
+//    protected void onStop() {
+//        // call the superclass method first
+//        super.onStop();
+//        // intent here
+//        Intent intent = new Intent(ToDoList.this, ListeningPage.class);
+//        startActivity(intent);
+//    }
 }

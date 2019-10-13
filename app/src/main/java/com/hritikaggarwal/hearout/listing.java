@@ -1,14 +1,17 @@
 package com.hritikaggarwal.hearout;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,7 +44,7 @@ public class listing extends AppCompatActivity {
     private TreeMap<String, String> dateAndSpeech;
     private TreeMap<String, String> taskAndDeadline;
     private Gson gson;
-
+    private String names;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,14 +116,36 @@ public class listing extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String l = "";
-                int size = listItems.size();
-                for (int i = 0; i < size; i++) {
-                    l += "Conversation with " + speakers +  " on " + listTimes.get(i) + "- " + listView.getItemAtPosition(i).toString() + '\n';
-                }
-                noteCreate = true;
-                // here we need to add the date of the conversation for easy understanding of the user
-                createNote("Conversation with " + speakers, l);
+                AlertDialog.Builder alert = new AlertDialog.Builder(listing.this);
+                alert.setMessage("Who were you in conversation with?");
+
+                // Set up the input
+                final EditText input = new EditText(listing.this);
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                alert.setView(input);
+
+                // Set up the buttons
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        speakers = input.getText().toString();
+                        String l = "";
+                        int size = listItems.size();
+                        for (int i = 0; i < size; i++) {
+                            l += "Conversation with " + speakers +  " on " + listTimes.get(i) + "- " + listView.getItemAtPosition(i).toString() + '\n';
+                        }
+                        noteCreate = true;
+                        // here we need to add the date of the conversation for easy understanding of the user
+                        createNote("Conversation", l);
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alert.show();
             }
         });
 
@@ -130,7 +155,7 @@ public class listing extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 noteCreate = true;
-                String l =  "Conversation with " + speakers +  " on " + listTimes.get(pos) + "- " + listView.getItemAtPosition(pos).toString();
+                String l =  "Conversation on " + listTimes.get(pos) + "- " + listView.getItemAtPosition(pos).toString();
                 createNote("Important Message", l);
                 return true;
             }
@@ -138,26 +163,18 @@ public class listing extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStop() {
-        // call the superclass method first
-        super.onStop();
-        // intent here
-        if(!noteCreate){
-            Intent intent = new Intent(listing.this, ListeningPage.class);
-            startActivity(intent);
-        }
-        noteCreate = false;  // New added
-    }
-
 //    @Override
-//    protected void onDestroy() {
+//    protected void onStop() {
 //        // call the superclass method first
-//        super.onDestroy();
-//        SharedPreferences prefs = getSharedPreferences("com.hritikaggarwal.hearout", MODE_PRIVATE);
-//        prefs.edit().remove("speechAndDate").commit();
-//        Log.d("tituD","destroyed"); //REMOVE THIS
+//        super.onStop();
+//        // intent here
+//        if(!noteCreate){
+//            Intent intent = new Intent(listing.this, ListeningPage.class);
+//            startActivity(intent);
+//        }
+//        noteCreate = false;  // New added
 //    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
