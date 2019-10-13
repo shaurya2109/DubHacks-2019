@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">OVER-HEAR</string>
 
-    <string name="starter">Hello World LOL</string>
+    <string name="starter">Please close the app</string>
     <string name="home_button_option1">SETUP</string>
     <string name="home_button_option2">START</string>
 

@@ -21,9 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.text.SimpleDateFormat; //NEW
 import java.util.Date; //NEW
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.*;
 
 // this is the class where we are listing to the conversation and also
 public class listing extends AppCompatActivity {
@@ -32,17 +34,38 @@ public class listing extends AppCompatActivity {
     private ListAdapter timeAdapter;
     private ArrayList<String> listItems;
     private ArrayList<String> listTimes;
+    private String[] listItemsArray;
     private ListView listView;
     private boolean noteCreate;
     private String speakers;
+    private TreeMap<String, String> dateAndSpeech;
+    private TreeMap<String, String> taskAndDeadline;
+    private Gson gson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing);
 
+        dateAndSpeech = new TreeMap<String, String>();
+        taskAndDeadline = new TreeMap<String, String>();
+        gson = new Gson();
+
         listItems = new ArrayList<String>();
         listTimes = new ArrayList<String>();
         speakers = "_____";
+
+        SharedPreferences prefs = getSharedPreferences("com.hritikaggarwal.hearout", MODE_PRIVATE);
+        String storedSpeechAndDate = prefs.getString("speechAndDate", "Your conversations appear here!");
+
+        Log.d("titu1",listItems.toString()); //REMOVE THIS
+
+        listItemsArray = storedSpeechAndDate.split(", ");
+        for (int i = 0; i < listItemsArray.length; i++) {
+            listItems.add(listItemsArray[i]);
+        }
+
+        Log.d("titu2",listItems.toString()); //REMOVE THIS
 
         // this thing is used in the display of the items in the list
         adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, listItems);
@@ -53,7 +76,6 @@ public class listing extends AppCompatActivity {
         indenter();
 
         Button btn = (Button) findViewById(R.id.hear_again);
-        Log.d("titu",listItems.toString());
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +87,18 @@ public class listing extends AppCompatActivity {
         Button btn2 = (Button) findViewById(R.id.save);
 
         Button btn3 = (Button) findViewById(R.id.todoList);
+
+        Button btn4 = (Button) findViewById(R.id.clear);
+
+        btn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences prefs = getSharedPreferences("com.hritikaggarwal.hearout", MODE_PRIVATE);
+                prefs.edit().remove("speechAndDate").commit();
+                Intent intent = new Intent(listing.this, listing.class);
+                startActivity(intent);
+            }
+        });
 
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,14 +143,21 @@ public class listing extends AppCompatActivity {
         // call the superclass method first
         super.onStop();
         // intent here
-        Log.d("onStop", "The thing works"); //REMOVE THIS
         if(!noteCreate){
             Intent intent = new Intent(listing.this, ListeningPage.class);
             startActivity(intent);
         }
         noteCreate = false;  // New added
-
     }
+
+//    @Override
+//    protected void onDestroy() {
+//        // call the superclass method first
+//        super.onDestroy();
+//        SharedPreferences prefs = getSharedPreferences("com.hritikaggarwal.hearout", MODE_PRIVATE);
+//        prefs.edit().remove("speechAndDate").commit();
+//        Log.d("tituD","destroyed"); //REMOVE THIS
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -128,8 +169,6 @@ public class listing extends AppCompatActivity {
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss", Locale.getDefault());
-                    String currentDateandTime = sdf.format(new Date());
                     String[] speech = result.get(0).trim().split(" ");
                     if (speech[0].equalsIgnoreCase("please") && speech.length > 1) {
                         int pos = 1;
@@ -146,13 +185,29 @@ public class listing extends AppCompatActivity {
                             deadline += " " + speech[pos];
                             pos++;
                         }
-                        Log.d("titu Task", task);
-                        Log.d("titu Deadline", deadline);
+                        taskAndDeadline.put("Task: " + task, "Deadline: " + deadline);
+
+                        //convert to string using gson
+                        String taskAndDeadlineString = gson.toJson(taskAndDeadline);
+
+                        //save in shared prefs
+                        SharedPreferences prefs = getSharedPreferences("com.hritikaggarwal.hearout", MODE_PRIVATE);
+                        prefs.edit().putString("taskAndDeadline", taskAndDeadlineString).apply();
+
+                        Toast.makeText(getApplicationContext(), "Added to To-Do List", Toast.LENGTH_SHORT).show();
+
                     } else {
-                        listItems.add(result.get(0));
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss", Locale.getDefault());
+                        String currentDateandTime = sdf.format(new Date());
+
+                        listItems.add(result.get(0) + " (" + currentDateandTime + ")");
                         listTimes.add(currentDateandTime);
 
+                        SharedPreferences prefs = getSharedPreferences("com.hritikaggarwal.hearout", MODE_PRIVATE);
+                        prefs.edit().putString("speechAndDate", listItems.toString().replace("[", "").replace("]", "")).apply();
+
                         listView.setAdapter(adapter);
+                        Log.d("titu3",listItems.toString()); //REMOVE THIS
                     }
 
                     indenter();
@@ -182,7 +237,6 @@ public class listing extends AppCompatActivity {
         } else {
             Toast.makeText(listing.this, "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
         }
-        Log.d("titu",listItems.toString()); //REMOVE THIS
     }
 
 

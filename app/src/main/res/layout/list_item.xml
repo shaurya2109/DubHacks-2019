@@ -9,8 +9,11 @@
         android:id="@+id/text1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:padding="20dip"
-        android:textSize="16dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+        android:textSize="18sp"
         android:textColor="@color/colorText" >
     </TextView>
 
@@ -18,8 +21,10 @@
         android:id="@+id/text2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:padding="20dip"
-        android:textSize="8dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="5dp"
+        android:textSize="16sp"
         android:textColor="@color/colorText" >
     </TextView>
 </LinearLayout>

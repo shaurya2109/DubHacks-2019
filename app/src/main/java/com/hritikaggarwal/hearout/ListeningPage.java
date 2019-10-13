@@ -98,6 +98,15 @@ public class ListeningPage extends AppCompatActivity {
         startActivity(startMain);
     }
 
+//    @Override
+//    protected void onDestroy() {
+//        // call the superclass method first
+//        super.onDestroy();
+//        SharedPreferences prefs = getSharedPreferences("com.hritikaggarwal.hearout", MODE_PRIVATE);
+//        prefs.edit().remove("speechAndDate").commit();
+//        Log.d("tituD","destroyedLP"); //REMOVE THIS
+//    }
+
 
     /**
      * Initialize the porcupineManager library.
