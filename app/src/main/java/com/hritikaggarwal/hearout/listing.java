@@ -130,11 +130,30 @@ public class listing extends AppCompatActivity {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss", Locale.getDefault());
                     String currentDateandTime = sdf.format(new Date());
+                    String[] speech = result.get(0).trim().split(" ");
+                    if (speech[0].equalsIgnoreCase("please") && speech.length > 1) {
+                        int pos = 1;
+                        String task = "", deadline = "none";
+                        while (!speech[pos].equalsIgnoreCase("by") && pos < speech.length) {
+                            task+=speech[pos] + " ";
+                            pos++;
+                        }
+                        if (pos < speech.length) {
+                            deadline = speech[pos + 1];
+                        }
+                        pos+=2;
+                        while(pos < speech.length) {
+                            deadline += " " + speech[pos];
+                            pos++;
+                        }
+                        Log.d("titu Task", task);
+                        Log.d("titu Deadline", deadline);
+                    } else {
+                        listItems.add(result.get(0));
+                        listTimes.add(currentDateandTime);
 
-                    listItems.add(result.get(0));
-                    listTimes.add(currentDateandTime);
-
-                    listView.setAdapter(adapter);
+                        listView.setAdapter(adapter);
+                    }
 
                     indenter();
                 }

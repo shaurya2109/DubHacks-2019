@@ -45,17 +45,17 @@ public class ToDoList extends AppCompatActivity {
 
         List<HashMap<String, String>> listItems = new ArrayList<>();
         SimpleAdapter adapter = new SimpleAdapter(this, listItems, R.layout.list_item,
-                new String[]{"First Line", "Second Line"},
+                new String[]{"Task", "Deadline"},
                 new int[]{R.id.text1, R.id.text2});
-
+`
 
         Iterator it = nameAddresses.entrySet().iterator();
         while (it.hasNext())
         {
             HashMap<String, String> resultsMap = new HashMap<>();
             Map.Entry pair = (Map.Entry)it.next();
-            resultsMap.put("First Line", pair.getKey().toString());
-            resultsMap.put("Second Line", pair.getValue().toString());
+            resultsMap.put("Task", pair.getKey().toString());
+            resultsMap.put("Deadline", pair.getValue().toString());
             listItems.add(resultsMap);
         }
 
