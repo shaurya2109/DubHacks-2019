@@ -35,7 +35,6 @@ public class listing extends AppCompatActivity {
     private ListView listView;
     private boolean noteCreate;
     private String speakers;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +63,18 @@ public class listing extends AppCompatActivity {
         });
 
         Button btn2 = (Button) findViewById(R.id.save);
+
+        Button btn3 = (Button) findViewById(R.id.todoList);
+
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noteCreate = true;
+                Intent intent = new Intent(listing.this, ToDoList.class);
+                startActivity(intent);
+            }
+        });
+
 
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override

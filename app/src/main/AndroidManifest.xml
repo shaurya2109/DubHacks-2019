@@ -3,11 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hritikaggarwal.hearout">
 
-    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -17,10 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".listing" android:label="Recent Conversations"></activity>
-        <activity android:name=".ListeningPage" android:label="WAIT!!!" />
-        <activity android:name=".SetupPage" android:label="Initial Setup" />
-        <activity android:name=".MainActivity" android:label="@string/app_name">
+        <activity android:name=".ToDoList"></activity>
+        <activity
+            android:name=".listing"
+            android:label="Recent Conversations" />
+        <activity
+            android:name=".ListeningPage"
+            android:label="WAIT!!!" />
+        <activity
+            android:name=".SetupPage"
+            android:label="Initial Setup" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,5 +32,10 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
 
 </manifest>

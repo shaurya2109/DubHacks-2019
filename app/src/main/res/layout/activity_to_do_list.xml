@@ -22,24 +22,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/todoList"
-        android:layout_width="80dp"
-        android:divider="@color/colorButton"
-        android:layout_height="80dp"
-        android:layout_alignEnd="@+id/layout"
-        android:layout_alignBottom="@+id/hear_again"
-
-        android:layout_marginBottom="195dp"
-        android:layout_marginRight="25dp"
-        android:background="@drawable/button_background"
-        android:text="TO-DO"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="315dp" />
-
-    <Button
-        android:id="@+id/hear_again"
+        android:id="@+id/prev_activity"
         android:layout_width="80dp"
         android:divider="@color/colorButton"
         android:layout_height="80dp"
@@ -49,25 +32,7 @@
         android:layout_marginBottom="25dp"
         android:layout_marginRight="25dp"
         android:background="@drawable/button_background"
-        android:text="Hear"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="315dp" />
-
-
-    <Button
-        android:id="@+id/save"
-        android:layout_width="80dp"
-        android:divider="@color/colorButton"
-        android:layout_height="80dp"
-        android:layout_alignEnd="@+id/layout"
-        android:layout_alignBottom="@+id/hear_again"
-
-        android:layout_marginBottom="95dp"
-        android:layout_marginRight="25dp"
-        android:background="@drawable/button_background"
-        android:text="Save"
+        android:text="Back"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
