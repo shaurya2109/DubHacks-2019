@@ -36,12 +36,10 @@ public class listing extends AppCompatActivity {
     private ListAdapter adapter;
     private ListAdapter timeAdapter;
     private ArrayList<String> listItems;
-    private ArrayList<String> listTimes;
     private String[] listItemsArray;
     private ListView listView;
     private boolean noteCreate;
     private String speakers;
-    private TreeMap<String, String> dateAndSpeech;
     private TreeMap<String, String> taskAndDeadline;
     private Gson gson;
     private String names;
@@ -50,12 +48,10 @@ public class listing extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing);
 
-        dateAndSpeech = new TreeMap<String, String>();
         taskAndDeadline = new TreeMap<String, String>();
         gson = new Gson();
 
         listItems = new ArrayList<String>();
-        listTimes = new ArrayList<String>();
         speakers = "_____";
 
         SharedPreferences prefs = getSharedPreferences("com.hritikaggarwal.hearout", MODE_PRIVATE);
@@ -125,18 +121,24 @@ public class listing extends AppCompatActivity {
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 alert.setView(input);
 
+
                 // Set up the buttons
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         speakers = input.getText().toString();
+                        Log.d("tits", speakers);
                         String l = "";
                         int size = listItems.size();
+                        Log.d("tits2", size + "");
                         for (int i = 0; i < size; i++) {
-                            l += "Conversation with " + speakers +  " on " + listTimes.get(i) + "- " + listView.getItemAtPosition(i).toString() + '\n';
+
+                            Log.d("tits2", speakers);
+                            l += "Conversation with " + speakers +  ": " + listView.getItemAtPosition(i).toString() + '\n';
                         }
                         noteCreate = true;
                         // here we need to add the date of the conversation for easy understanding of the user
                         createNote("Conversation", l);
+                        Log.d("tits2", speakers);
                     }
                 });
                 alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -155,7 +157,7 @@ public class listing extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 noteCreate = true;
-                String l =  "Conversation on " + listTimes.get(pos) + "- " + listView.getItemAtPosition(pos).toString();
+                String l =  listView.getItemAtPosition(pos).toString();
                 createNote("Important Message", l);
                 return true;
             }
@@ -218,7 +220,6 @@ public class listing extends AppCompatActivity {
                         String currentDateandTime = sdf.format(new Date());
 
                         listItems.add(result.get(0) + " (" + currentDateandTime + ")");
-                        listTimes.add(currentDateandTime);
 
                         SharedPreferences prefs = getSharedPreferences("com.hritikaggarwal.hearout", MODE_PRIVATE);
                         prefs.edit().putString("speechAndDate", listItems.toString().replace("[", "").replace("]", "")).apply();
